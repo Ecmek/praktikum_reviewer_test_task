@@ -17,6 +17,8 @@ class Record:
         Следует немного подправить переносы строк
         https://pythonworld.ru/osnovy/pep-8-rukovodstvo-po-napisaniyu-koda-na-python.html#section-5
         не использовав при этом обратный слэш
+
+        Текущую дату так же можно получить - dt.date.today()
         """
         self.date = (
             dt.datetime.now().date() if
@@ -56,6 +58,11 @@ class Calculator:
         """
         for Record in self.records:
             if Record.date == dt.datetime.now().date():
+                """
+                В таких выражениях можно использовать cоставное присваивание
+                today_stats += Record.amount
+                Но правильнее будет сделать, как я описал выше с используя sum
+                """
                 today_stats = today_stats + Record.amount
         return today_stats
 
@@ -85,6 +92,7 @@ class CaloriesCalculator(Calculator):
     При обращении к func.__doc__ мы не получим данную подсказку
     Надо перенести его под функцию.
     https://blog.finxter.com/what-is-__-doc-__-in-python/
+    https://habr.com/ru/post/499358/
     """
     def get_calories_remained(self):  # Получает остаток калорий на сегодня
         """
@@ -121,14 +129,15 @@ class CashCalculator(Calculator):
 
     """
     Я так понимаю тут хотелось добавить аннотацию типов?
-    Данный числа у нас имеют фиксированное значение и тип, в данном случае int
+    Данные числа у нас имеют фиксированное значение и тип, в данном случае int
     и нет необходимости конвертировать их в float.
     """
     USD_RATE = float(60)  # Курс доллар США.
     EURO_RATE = float(70)  # Курс Евро.
     """
     В данном случае в функцию лучше передавать только один дополнительный
-    аргумент - currnecy.
+    аргумент - currency, передача курсов валют будет излишней, так как к ним
+    можно обратиться используя self.
     У нас очень много if-ов и это пока что всего 3 валюты, если их будет
     больше, то у нас будет простыня из них.
     Есть решение получше, внутри функции создать словарь и в качестве ключа
@@ -138,8 +147,8 @@ class CashCalculator(Calculator):
     def get_today_cash_remained(self, currency,
                                 USD_RATE=USD_RATE, EURO_RATE=EURO_RATE):
         """
-        Давай уберем эту лишнюю переменную и сделаем проверку валюты, если
-        валюты нет в словаре, вывести об этом сообщение.
+        Давай уберем эту лишнюю переменную и сделаем проверку валюты.
+        Eсливалюты нет в словаре, вывести об этом сообщение.
         """
         currency_type = currency
         """Об этом писал в CaloriesCalculator - get_calories_remained """
